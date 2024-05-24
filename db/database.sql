@@ -55,6 +55,24 @@ CREATE TABLE recurso_actividad (
     FOREIGN KEY (materia_id) REFERENCES materia_nivel(materia_id)
 );
 
+CREATE TABLE recurso_libro (
+    libro_id INT(11) NOT NULL AUTO_INCREMENT,
+    materia_id INT(11) NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    imagen_url VARCHAR(500) NOT NULL,
+    url VARCHAR(200) NOT NULL,
+    fecha DATE NOT NULL,
+    descripcion TEXT NOT NULL,
+    nivel VARCHAR(45) NOT NULL,
+    materia VARCHAR(100) NOT NULL,
+    PRIMARY KEY (libro_id),
+    FOREIGN KEY (materia_id) REFERENCES materia_nivel(materia_id)
+);
+
+
+
+
+
 DESCRIBE materia_nivel;
 
 
