@@ -52,12 +52,12 @@ export const getLibro = async (req, res) => {
 
 
 export const createLibro = async (req, res) => {
-    const {materia_id, titulo, imagen_url, url, fecha, descripcion, nivel, materia} = req.body;
+    const {materia_id, titulo, imagen_url, url, autor, edicicon, fecha, descripcion, nivel, materia} = req.body;
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO recurso_libro (materia_id, titulo, imagen_url, url, fecha, descripcion, nivel, materia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [materia_id, titulo, imagen_url, url, fecha, descripcion, nivel, materia]
+            'INSERT INTO recurso_libro (materia_id, titulo, imagen_url, url, autor, edicicon, fecha, descripcion, nivel, materia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [materia_id, titulo, imagen_url, url, autor, edicicon, fecha, descripcion, nivel, materia]
         );
         
         res.status(201).json({
@@ -66,6 +66,8 @@ export const createLibro = async (req, res) => {
             titulo,
             imagen_url,
             url,
+            autor,
+            edicicon,
             fecha,
             descripcion, 
             nivel, 
@@ -83,10 +85,10 @@ export const createLibro = async (req, res) => {
 
 export const updateLibro = async (req, res) => {
     const {id} = req.params
-    const {materia_id, titulo, imagen_url, url, fecha, descripcion, nivel, materia} = req.body
+    const {materia_id, titulo, imagen_url, url, autor, edicicon, fecha, descripcion, nivel, materia} = req.body
 
     try {
-        const [result] = await pool.query('UPDATE recurso_libro SET materia_id = IFNULL(?, materia_id), titulo = IFNULL(?, titulo), imagen_url = IFNULL(?, imagen_url), url = IFNULL(?, url), fecha= IFNULL(?, fecha), descripcion = IFNULL(?, descripcion), nivel = IFNULL(?, nivel), materia = IFNULL(?, materia) WHERE video_id = ?', [materia_id, titulo, imagen_url, url, fecha, descripcion, nivel, materia, id])
+        const [result] = await pool.query('UPDATE recurso_libro SET materia_id = IFNULL(?, materia_id), titulo = IFNULL(?, titulo), imagen_url = IFNULL(?, imagen_url), url = IFNULL(?, url), autor = IFNULL(?, autor), edicicon = IFNULL(?, edicicon), fecha= IFNULL(?, fecha), descripcion = IFNULL(?, descripcion), nivel = IFNULL(?, nivel), materia = IFNULL(?, materia) WHERE video_id = ?', [materia_id, titulo, imagen_url, url, autor, edicicon, fecha, descripcion, nivel, materia, id])
         console.log(result)
         if (result.affectedRows === 0) return res.status(404).json({
             message: 'Libro not found'
