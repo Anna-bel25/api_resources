@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { 
-    getMaterias, 
+    getMaterias,
+    getMateria,
+    getMateria_nivel,
+    
     createMateria, 
     updateMateria,
-    deleteMateria,
-    
-    getMateria,
-    getMateria_nivel
+    deleteMateria
 } from '../controllers/materias.controller.js'
 
 const router = Router()

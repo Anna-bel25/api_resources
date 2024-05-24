@@ -20,7 +20,7 @@ export const getMateria_nivel = async (req, res) => {
         if (rows.length <= 0) return res.status(404).json({
             message: 'Materias of educational level not found'
         })
-        res.json(rows[0])
+        res.json(rows)
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong'
@@ -35,7 +35,7 @@ export const getMateria = async (req, res) => {
         if (rows.length <= 0) return res.status(404).json({
             message: 'Materia not found'
         })
-        res.json(rows[0])
+        res.json(rows)
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong'

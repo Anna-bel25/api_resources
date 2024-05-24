@@ -33,7 +33,7 @@ CREATE TABLE recurso_menu (
 CREATE TABLE recurso_video (
     video_id INT(11) NOT NULL AUTO_INCREMENT,
     materia_id INT(11) NOT NULL,
-    titulo VARCHAR(50) NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
     url VARCHAR(200) NOT NULL,
     descripcion VARCHAR(200) NOT NULL,
     nivel VARCHAR(45) NOT NULL,
