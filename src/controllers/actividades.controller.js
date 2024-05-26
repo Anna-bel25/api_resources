@@ -103,7 +103,7 @@ export const updateActividad = async (req, res) => {
             descripcion = IFNULL(?, descripcion), 
             nivel = IFNULL(?, nivel), 
             materia = IFNULL(?, materia) 
-        WHERE video_id = ?`,
+        WHERE actividad_id = ?`,
         [materia_id, titulo, imagen_url, url, descripcion, nivel, materia, id]
     );
         console.log(result)

@@ -48,7 +48,7 @@ CREATE TABLE recurso_actividad (
     titulo VARCHAR(50) NOT NULL,
     imagen_url VARCHAR(200) NOT NULL,
     url VARCHAR(200) NOT NULL,
-    descripcion VARCHAR(200) NOT NULL,
+    descripcion VARCHAR(500) NOT NULL,
     nivel VARCHAR(45) NOT NULL,
     materia VARCHAR(45) NOT NULL,
     PRIMARY KEY (actividad_id),
