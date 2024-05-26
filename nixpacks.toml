@@ -1,0 +1,18 @@
+[phases.setup]
+commands = [
+  "npm install"
+]
+
+[phases.build]
+commands = []
+
+[phases.start]
+commands = [
+  "npm start"
+]
+
+[build]
+plan = "node"
+
+[start]
+command = "npm start"
