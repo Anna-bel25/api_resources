@@ -5,7 +5,12 @@ import { pool } from "../db.js"
 export const getMaterias = async (req, res) => {
     try {
         ///throw new Error('Error')
-        const [rows] = await pool.query('SELECT * FROM materia_nivel')
+        const [rows] = await pool.query('SELECT * FROM materia_nivel');
+        if (rows.length === 0) {
+            return res.status(404).json({
+                message: 'No materias found'
+            });
+        }
         res.json(rows)
     } catch (error) {
         return res.status(500).json({
