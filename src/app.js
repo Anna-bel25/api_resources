@@ -9,7 +9,8 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:4200',
+    //origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'https://44f6-2800-440-2011-4600-d53d-6955-4fe9-3b6a.ngrok-free.app'],
   }));
 
 
