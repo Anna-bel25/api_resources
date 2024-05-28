@@ -94,39 +94,43 @@ export const createLibro = async (req, res) => {
 };
 
 //--------------------------------------------- ACTUALIZAR UN LIBRO ---------------------------------------------
+e//--------------------------------------------- ACTUALIZAR UN LIBRO ---------------------------------------------
 export const updateLibro = async (req, res) => {
-    const {id} = req.params
-    const {materia_id, titulo, imagen_url, url, autor, edicion, fecha, descripcion, nivel, materia} = req.body
+    const { id } = req.params;
+    const { materia_id, titulo, imagen_url, url, autor, edicion, fecha, descripcion, nivel, materia } = req.body;
 
     try {
         const [result] = await pool.query(`
-        UPDATE recurso_libro 
-        SET 
-            materia_id = IFNULL(?, materia_id), 
-            titulo = IFNULL(?, titulo), 
-            imagen_url = IFNULL(?, imagen_url), 
-            url = IFNULL(?, url), 
-            autor = IFNULL(?, autor), 
-            edicion = IFNULL(?, edicion), 
-            fecha= IFNULL(?, fecha), 
-            descripcion = IFNULL(?, descripcion), 
-            nivel = IFNULL(?, nivel), 
-            materia = IFNULL(?, materia) 
-        WHERE video_id = ?`, 
-        [materia_id, titulo, imagen_url, url, autor, edicion, fecha, descripcion, nivel, materia, id]
-    );
-        console.log(result)
-        if (result.affectedRows === 0) return res.status(404).json({
-            message: 'Libro not found'
-        })
-        const [rows] = await pool.query('SELECT * FROM recurso_libro WHERE libro_id = ?', [id])
-        res.json(rows)
+            UPDATE recurso_libro 
+            SET 
+                materia_id = IFNULL(?, materia_id), 
+                titulo = IFNULL(?, titulo), 
+                imagen_url = IFNULL(?, imagen_url), 
+                url = IFNULL(?, url), 
+                autor = IFNULL(?, autor), 
+                edicion = IFNULL(?, edicion), 
+                fecha= IFNULL(?, fecha), 
+                descripcion = IFNULL(?, descripcion), 
+                nivel = IFNULL(?, nivel), 
+                materia = IFNULL(?, materia) 
+            WHERE libro_id = ?`, 
+            [materia_id, titulo, imagen_url, url, autor, edicion, fecha, descripcion, nivel, materia, id]
+        );
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'Libro not found'
+            });
+        }
+
+        const [rows] = await pool.query('SELECT * FROM recurso_libro WHERE libro_id = ?', [id]);
+        res.json(rows);
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong'
-        })
+        });
     }
-}
+};
 
 //--------------------------------------------- ELIMINAR UN LIBRO ---------------------------------------------
 export const deleteLibro = async (req, res) => {
