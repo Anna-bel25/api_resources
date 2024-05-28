@@ -18,7 +18,7 @@ router.get('/libros/libro/:id', getLibro);
 
 router.post('/libros', createLibro);
 
-router.patch('/libros/materia/:id', updateLibro);
+router.patch('/libros/libro/:id', updateLibro);
 
 router.delete('/libros/libro/:id', deleteLibro);
 
