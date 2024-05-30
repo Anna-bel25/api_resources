@@ -90,3 +90,13 @@ INSERT INTO materia_nivel VALUES
     (2, 1, 'Pensamiento Matemático', 'https://plus.unsplash.com/premium_photo-1661292099839-1e89fe3fa727?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bmklQzMlQjFvcyUyMGNvbiUyMG1hdGVtYXRpY2FzfGVufDB8fDB8fHww', '2023-05-21', 'admin', 'El curso de Pensamiento Matemático en preescolar tiene como objetivo introducir conceptos matemáticos básicos de manera lúdica y experiencial. Se enfoca en el reconocimiento de números, formas, patrones y secuencias, promoviendo el razonamiento lógico.'),
     (3, 1, 'Educación Física', 'https://plus.unsplash.com/premium_photo-1683133504417-7c9eabab7ade?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bmklQzMlQjFvcyUyMGhhY2llbmRvJTIwZGVwb3J0ZXxlbnwwfHwwfHx8MA%3D%3D', '2023-05-21', 'admin', 'El curso de Educación Física en preescolar tiene como objetivo promover el desarrollo motor y la actividad física en los niños en edad preescolar. Se realizan actividades recreativas, juegos y ejercicios que favorecen la coordinación, la fuerza y la socialización de los niños.'),
     (4, 1, 'Arte y Creatividad', 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bmklQzMlQjFvcyUyMHBpbnRhbmRvfGVufDB8fDB8fHww', '2023-05-21', 'admin', 'El curso de Arte y Creatividad en preescolar tiene como objetivo estimular la imaginación, la expresión artística y la creatividad de los niños a través de diversas actividades plásticas, musicales y de expresión corporal. Se fomenta el desarrollo de habilidades manuales.');
+
+
+------------ Maria -----------------
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipocuenta VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    correo VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
