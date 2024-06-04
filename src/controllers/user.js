@@ -5,6 +5,7 @@ import { pool } from "../db.js" // Asegúrate de importar el pool de conexión
 
 //------------NEW USER---------------
 export const newUser = async (req, res) => {
+    console.log(req.body);
     const { tipocuenta, username, correo, password } = req.body;
 
     try {
@@ -15,9 +16,15 @@ export const newUser = async (req, res) => {
                 message: 'Ya existe el usuario con el nombre ' + username 
             });
         }
-
+        // Mostrar datos recibidos en el log
+        console.log('Datos recibidos del frontend:');
+        console.log('Tipo de Cuenta:', tipocuenta);
+        console.log('Nombre de Usuario:', username);
+        console.log('Correo:', correo);
         // Encriptamos la contraseña
+        console.log('Contraseña sin encriptar:', password); // Registro para verificar la contraseña antes de encriptar
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log('Contraseña encriptada:', hashedPassword);
 
         // Guardamos usuario en la base de datos
         const [result] = await pool.query(`
@@ -53,6 +60,10 @@ export const loginUser = async (req, res) => {
                 message: 'No existe un usuario con el correo ' + correo + ' en la base de datos'
             });
         }
+        // Mostrar datos recibidos en el log
+        console.log('Datos recibidos del frontend:');
+        console.log('Correo:', correo);
+        console.log('Contraseña sin encriptar:', password);
 
         const user = userRows[0];
 

@@ -4,7 +4,7 @@ const validateToken = (req, res, next) => {
     const headerToken = req.headers['authorization'];
     console.log(headerToken);
 
-    if (headerToken !== undefined && headerToken.startsWith('bearer ')) {
+    if (headerToken !== undefined && headerToken.startsWith('Bearer ')) {
         // Tiene token
         try {
             const bearerToken = headerToken.slice(7);
