@@ -100,3 +100,19 @@ CREATE TABLE users (
     correo VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
+
+-----------Ivette---------------
+CREATE TABLE coleccion (
+    coleccion_id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    es_privado BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (usuario_id) REFERENCES users(id)
+);
+
+CREATE TABLE  coleccion_recurso (
+    colecciones_id INT NOT NULL,
+    recurso_id INT NOT NULL,
+    recurso_tipo ENUM('menu', 'video', 'actividad', 'libro') NOT NULL,
+    FOREIGN KEY (colecciones_id) REFERENCES coleccion(coleccion_id)
+);
