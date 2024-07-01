@@ -52,30 +52,36 @@ export const getVideo = async (req, res) => {
 
 //--------------------------------------------- CREAR UN VIDEO ---------------------------------------------
 export const createVideo = async (req, res) => {
-    const {materia_id, titulo, url, descripcion, nivel, materia} = req.body;
+    const { materia_id, titulo, descripcion, nivel, materia, url } = req.body;
+    const videoFile = req.files ? req.files.video : null; 
+
+    const videoFileUrl = videoFile ? `/uploads/videos/${videoFile.name}` : url || null;
+
+    if (videoFile) {
+        await videoFile.mv(`./uploads/videos/${videoFile.name}`);
+    }
 
     try {
         const [result] = await pool.query(
             `INSERT INTO recurso_video 
             (
-                materia_id, 
-                titulo, 
-                url, 
+                materia_id,
+                titulo,
+                url,
                 descripcion, 
                 nivel, 
                 materia
-            ) 
-                VALUES (?, ?, ?, ?, ?, ?)`,
-            [materia_id, titulo, url, descripcion, nivel, materia]
+            ) VALUES (?, ?, ?, ?, ?, ?)`,
+            [materia_id, titulo, videoFileUrl, descripcion, nivel, materia]
         );
         
         res.status(201).json({
             video_id: result.insertId,
-            materia_id, 
-            titulo, 
-            url, 
-            descripcion, 
-            nivel, 
+            materia_id,
+            titulo,
+            url: videoFileUrl,
+            descripcion,
+            nivel,
             materia
         });
     } catch (error) {
@@ -85,6 +91,42 @@ export const createVideo = async (req, res) => {
         });
     }
 };
+
+
+/*export const createVideo = async (req, res) => {
+    const { materia_id, titulo, url, descripcion, nivel, materia } = req.body;
+
+    try {
+        const [result] = await pool.query(
+            `INSERT INTO recurso_video 
+            (
+                materia_id,
+                titulo,
+                url,
+                descripcion, 
+                nivel, 
+                materia
+            ) VALUES (?, ?, ?, ?, ?, ?)`,
+            [materia_id, titulo, url, descripcion, nivel, materia]
+        );
+        
+        res.status(201).json({
+            video_id: result.insertId,
+            materia_id,
+            titulo,
+            url,
+            descripcion,
+            nivel,
+            materia
+        });
+    } catch (error) {
+        console.error('Error creating video:', error);
+        return res.status(500).json({
+            message: 'Something went wrong'
+        });
+    }
+};*/
+
 
 // --------------------------------------------- ACTUALIZAR UN VIDEO ---------------------------------------------
 export const updateVideo = async (req, res) => {

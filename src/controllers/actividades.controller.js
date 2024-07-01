@@ -1,6 +1,5 @@
 import { pool } from "../db.js"
 
-
 //--------------------------------------------- OBTENER TODAS LAS ACTIVIDADES ---------------------------------------------
 export const getActividades = async (req, res) => {
     try {
@@ -51,6 +50,57 @@ export const getActividad = async (req, res) => {
 
 //--------------------------------------------- CREAR UNA ACTIVIDAD ---------------------------------------------
 export const createActividad = async (req, res) => {
+    const { materia_id, titulo, descripcion, nivel, materia, url, imagen_url } = req.body;
+    const imagen = req.files ? req.files.imagen : null;
+    const pdf = req.files ? req.files.pdf : null;
+
+    const imagenFileUrl = imagen ? `/uploads/actividades/imagenes/${imagen.name}` : imagen_url || null;
+    const pdfFileUrl = pdf ? `/uploads/actividades/pdfs/${pdf.name}` : url || null;
+
+    if (imagen) {
+        await imagen.mv(`./uploads/actividades/imagenes/${imagen.name}`);
+    }
+
+    if (pdf) {
+        await pdf.mv(`./uploads/actividades/pdfs/${pdf.name}`);
+    }
+
+    try {
+        const [result] = await pool.query(
+            `INSERT INTO recurso_actividad 
+            (
+                materia_id, 
+                titulo, 
+                imagen_url, 
+                url, 
+                descripcion, 
+                nivel, 
+                materia
+            ) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [materia_id, titulo, imagenFileUrl, pdfFileUrl, descripcion, nivel, materia]
+        );
+        
+        res.status(201).json({
+            actividad_id: result.insertId,
+            materia_id, 
+            titulo,
+            imagen_url: imagenFileUrl,
+            url: pdfFileUrl,
+            descripcion, 
+            nivel, 
+            materia
+        });
+    } catch (error) {
+        console.error('Error creating actividad:', error);
+        return res.status(500).json({
+            message: 'Something went wrong'
+        });
+    }
+};
+
+
+/*export const createActividad = async (req, res) => {
     const {materia_id, titulo, imagen_url, url, descripcion, nivel, materia} = req.body;
 
     try {
@@ -85,7 +135,8 @@ export const createActividad = async (req, res) => {
             message: 'Something went wrong'
         });
     }
-};
+};*/
+
 
 //--------------------------------------------- ACTUALIZAR UNA ACTIVIDAD ---------------------------------------------
 export const updateActividad = async (req, res) => {

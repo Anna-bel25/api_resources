@@ -52,6 +52,64 @@ export const getLibro = async (req, res) => {
 
 //--------------------------------------------- CREAR UN LIBRO ---------------------------------------------
 export const createLibro = async (req, res) => {
+    const { materia_id, titulo, autor, edicion, fecha, descripcion, nivel, materia } = req.body;
+    const imagen = req.files ? req.files.imagen : null;
+    const pdf = req.files ? req.files.pdf : null;
+
+    const imagenFileUrl = imagen ? `/uploads/libros/imagenes/${imagen.name}` : req.body.imagen_url || null;
+    const pdfFileUrl = pdf ? `/uploads/libros/pdfs/${pdf.name}` : req.body.url || null;
+
+    if (imagen) {
+        await imagen.mv(`./uploads/libros/imagenes/${imagen.name}`);
+    }
+
+    if (pdf) {
+        await pdf.mv(`./uploads/libros/pdfs/${pdf.name}`);
+    }
+
+    const fechaValida = fecha && !isNaN(Date.parse(fecha)) ? new Date(fecha).toISOString().split('T')[0] : null;
+
+    try {
+        const [result] = await pool.query(
+            `INSERT INTO recurso_libro 
+            (
+                materia_id,
+                titulo, 
+                imagen_url, 
+                url, 
+                autor, 
+                edicion, 
+                fecha, 
+                descripcion, 
+                nivel, 
+                materia
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [materia_id, titulo, imagenFileUrl, pdfFileUrl, autor, edicion, fechaValida, descripcion, nivel, materia]
+        );
+
+        res.status(201).json({
+            libro_id: result.insertId,
+            materia_id, 
+            titulo,
+            imagen_url: imagenFileUrl,
+            url: pdfFileUrl,
+            autor,
+            edicion,
+            fecha: fechaValida,
+            descripcion, 
+            nivel, 
+            materia
+        });
+    } catch (error) {
+        console.error('Error creating libro:', error);
+        return res.status(500).json({
+            message: 'Something went wrong'
+        });
+    }
+};
+
+
+/*export const createLibro = async (req, res) => {
     const {materia_id, titulo, imagen_url, url, autor, edicion, fecha, descripcion, nivel, materia} = req.body;
 
     try {
@@ -91,7 +149,8 @@ export const createLibro = async (req, res) => {
             message: 'Something went wrong'
         });
     }
-};
+};*/
+
 
 //--------------------------------------------- ACTUALIZAR UN LIBRO ---------------------------------------------
 export const updateLibro = async (req, res) => {

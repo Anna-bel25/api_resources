@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'path';
+import fileupload from 'express-fileupload';
 import materiasRoutes from './routes/materias.routes.js';
 import videosRoutes from './routes/videos.routes.js';
 import actividadesRoutes from './routes/actividades.routes.js';
@@ -15,8 +17,16 @@ app.use(cors({
     //origin: ['http://localhost:4200', 'https://44f6-2800-440-2011-4600-d53d-6955-4fe9-3b6a.ngrok-free.app'],
   }));
 
+app.use(express.json());
 
-app.use(express.json())
+app.use(fileupload({
+  createParentPath: true
+}));
+
+app.use('/uploads', express.static(path.resolve('uploads')));
+//app.use('/uploads', express.static('uploads'));
+  
+//app.use(express.json())
 
 app.use(indexRoutes)
 app.use('/api', materiasRoutes)
@@ -37,3 +47,4 @@ app.use((req, res, next) => {
 
 
 export default app;
+
