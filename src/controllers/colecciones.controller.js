@@ -56,8 +56,8 @@ export const guardarRecursoEnColeccion = async (req, res) => {
   try {
     for (const coleccion_id of colecciones) {
       await pool.query(
-        'INSERT INTO coleccion_recurso (colecciones_id, recurso_id, recurso_tipo) VALUES (?, ?, ?)',
-        [coleccion_id, resource.id, resource.type]
+        'INSERT INTO coleccion_recurso (colecciones_id, recurso_id,titulo, descripcion,url, image_url, recurso_tipo) VALUES (?, ?, ?, ? , ? , ? , ?)',
+        [coleccion_id, resource.id,resource.titulo,resource.descripcion,resource.url,resource.image_url, resource.type]
       );
     }
 
@@ -67,5 +67,58 @@ export const guardarRecursoEnColeccion = async (req, res) => {
     return res.status(500).json({
       message: 'Error al guardar el recurso en la colección'
     });
+  }
+};
+
+export const obtenerColeccionesPublicas = async (req, res) => {
+  try {
+      const [rows] = await pool.query(
+          `SELECT c.coleccion_id, c.nombre, u.username AS usuario_nombre
+           FROM coleccion c
+           JOIN users u ON c.usuario_id = u.id
+           WHERE c.es_privado = TRUE`
+      );
+      
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error al obtener colecciones públicas:', error);
+      return res.status(500).json({
+          message: 'Algo salió mal :('
+      });
+  }
+};
+
+export const obtenerRecursosDeColeccion = async (req, res) => {
+  const { coleccion_id } = req.params;
+
+  try {
+      const [rows] = await pool.query(
+          `SELECT recurso_id, titulo, descripcion, url, image_url, recurso_tipo FROM coleccion_recurso WHERE colecciones_id = ?`,
+          [coleccion_id]
+      );
+      
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error al obtener recursos de la colección:', error);
+      return res.status(500).json({
+          message: 'Algo salió mal :('
+      });
+  }
+};
+
+export const obtenerColeccionesPrivadas = async (req, res) => {
+  try {
+      const usuario_id = req.user.id;
+      const [rows] = await pool.query(
+          `SELECT coleccion_id, nombre FROM coleccion WHERE usuario_id = ? AND es_privado = FALSE`,
+          [usuario_id]
+      );
+      
+      res.status(200).json(rows);
+  } catch (error) {
+      console.error('Error al obtener colecciones privadas:', error);
+      return res.status(500).json({
+          message: 'Algo salió mal :('
+      });
   }
 };

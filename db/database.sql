@@ -113,6 +113,10 @@ CREATE TABLE coleccion (
 CREATE TABLE  coleccion_recurso (
     colecciones_id INT NOT NULL,
     recurso_id INT NOT NULL,
+    titulo VARCHAR (200),
+    descripcion VARCHAR (300),
+    url VARCHAR(500),
+    image_url VARCHAR(500),
     recurso_tipo ENUM('menu', 'video', 'actividad', 'libro') NOT NULL,
     FOREIGN KEY (colecciones_id) REFERENCES coleccion(coleccion_id)
 );
