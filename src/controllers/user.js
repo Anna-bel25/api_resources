@@ -74,9 +74,8 @@ export const loginUser = async (req, res) => {
                 message: 'Contraseña Incorrecta'
             });
         }
-
-        // Generamos token
-        const token = jwt.sign(
+         // Generamos token
+         const token = jwt.sign(
             { id: user.id,correo: correo },
             process.env.SECRET_KEY || 'pepito123'
         );
