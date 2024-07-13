@@ -122,3 +122,59 @@ export const obtenerColeccionesPrivadas = async (req, res) => {
       });
   }
 };
+
+export const eliminarColeccion = async (req, res) => {
+  const { coleccion_id } = req.params;
+  const usuario_id = req.user.id;
+
+  try {
+    await pool.query(
+      `DELETE FROM coleccion_recurso WHERE colecciones_id = ?`,
+      [coleccion_id]
+    );
+
+    const [result] = await pool.query(
+      `DELETE FROM coleccion WHERE coleccion_id = ? AND usuario_id = ?`,
+      [coleccion_id, usuario_id]
+    );
+
+    res.status(200).json({ message: 'Colección eliminada exitosamente' });
+  } catch (error) {
+     console.error('Error al eliminar la colección:', error);
+    return res.status(500).json({
+      message: 'Error interno al intentar eliminar la colección'
+    });
+  }
+};
+
+
+export const eliminarRecursoDeColeccion = async (req, res) => {
+  const { coleccion_id, recurso_id } = req.params;
+  const usuario_id = req.user.id; 
+
+  try {
+      const [coleccion] = await pool.query(
+          `SELECT coleccion_id FROM coleccion WHERE coleccion_id = ? AND usuario_id = ?`,
+          [coleccion_id, usuario_id]
+      );
+
+      // if (coleccion.length === 0) {
+      //     return res.status(404).json({ message: 'Colección no encontrada o no tienes permiso para modificarla' });
+      // }
+      const [result] = await pool.query(
+          `DELETE FROM coleccion_recurso WHERE colecciones_id = ? AND recurso_id = ?`,
+          [coleccion_id, recurso_id]
+      );
+
+      // if (result.affectedRows === 0) {
+      //     return res.status(404).json({ message: 'Recurso no encontrado en la colección' });
+      // }
+
+      res.status(200).json({ message: 'Recurso eliminado de la colección exitosamente' });
+  } catch (error) {
+      console.error('Error al eliminar el recurso de la colección:', error);
+      return res.status(500).json({
+          message: 'Algo salió mal :('
+      });
+  }
+};
