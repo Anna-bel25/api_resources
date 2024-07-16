@@ -5,7 +5,7 @@ import { pool } from "../db.js" // Asegúrate de importar el pool de conexión
 
 //------------NEW USER---------------
 export const newUser = async (req, res) => {
-    console.log(req.body);
+    console.log(req.body); 
     const { tipocuenta, username, correo, password } = req.body;
 
     try {
@@ -47,7 +47,6 @@ export const newUser = async (req, res) => {
         });
     }
 };
-
 //------------LOGIN---------------
 export const loginUser = async (req, res) => {
     const { correo, password } = req.body;
@@ -74,10 +73,12 @@ export const loginUser = async (req, res) => {
                 message: 'Contraseña Incorrecta'
             });
         }
-         // Generamos token
-         const token = jwt.sign(
-            { id: user.id,correo: correo },
-            process.env.SECRET_KEY || 'pepito123'
+
+        // Si el correo y la contraseña coinciden, generamos el token
+        const token = jwt.sign(
+            { tipocuenta: user.tipocuenta,username: user.username  },
+            process.env.SECRET_KEY || 'pepito123',
+            { expiresIn: '2m' }
         );
 
         res.json({ token });
@@ -88,3 +89,39 @@ export const loginUser = async (req, res) => {
         });
     }
 };
+//---------------Eliminar cuenta--------------
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await pool.query('DELETE FROM users WHERE id = ?', [id]);
+    res.json({ message: 'Usuario eliminado' });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Upps, ocurrió un error',
+            error: error.message
+            });
+    }
+};
+//--------Verificar si el correo ya existe en la BD------(registro)
+export const CorreoExistente = async (req, res) => {
+    console.log(req.body); 
+
+    try {
+        // Validamos si el usuario ya existe en la base de datos
+        const [existingUserRows] = await pool.query('SELECT * FROM users WHERE username = ?', [correo]);
+        if (existingUserRows.length > 0) {
+            return res.status(400).json({
+                message: 'Ya existe una cuenta con el correo: ' + correo 
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Upps, ocurrió un error',
+            error: error.message
+        });
+    }
+};
+//--------Verificar que el correo y la contraseña coincidan en la BD------(login)
+
+
+
