@@ -34,7 +34,7 @@ export const newUser = async (req, res) => {
         );
 
         res.json({
-            user_id: result.insertId,
+            id: result.insertId,
             tipocuenta,
             username,
             correo,
@@ -76,9 +76,9 @@ export const loginUser = async (req, res) => {
 
         // Si el correo y la contraseña coinciden, generamos el token
         const token = jwt.sign(
-            { tipocuenta: user.tipocuenta,username: user.username  },
+            {id: user.id,tipocuenta: user.tipocuenta,username: user.username  },
             process.env.SECRET_KEY || 'pepito123',
-            { expiresIn: '2m' }
+            { expiresIn: '1h' }
         );
 
         res.json({ token });
@@ -90,18 +90,18 @@ export const loginUser = async (req, res) => {
     }
 };
 //---------------Eliminar cuenta--------------
-export const deleteUser = async (req, res) => {
-    const { id } = req.params;
+export const deleteusers = async (req, res) => {
+    const id = req.params.id;
     try {
-        const [rows] = await pool.query('DELETE FROM users WHERE id = ?', [id]);
-    res.json({ message: 'Usuario eliminado' });
+      const [rows] = await pool.query('DELETE FROM users WHERE id = ?', [id]);
+      res.json({ message: 'Usuario eliminado' });
     } catch (error) {
-        return res.status(500).json({
-            message: 'Upps, ocurrió un error',
-            error: error.message
-            });
+      return res.status(500).json({
+        message: 'Upps, ocurrió un error',
+        error: error.message
+      });
     }
-};
+  };
 //--------Verificar si el correo ya existe en la BD------(registro)
 export const CorreoExistente = async (req, res) => {
     console.log(req.body); 
@@ -121,7 +121,51 @@ export const CorreoExistente = async (req, res) => {
         });
     }
 };
-//--------Verificar que el correo y la contraseña coincidan en la BD------(login)
+//--------traer datos de la tabla users a frontend------
+export const getUsers = async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM users');
+        res.json(rows);
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Upps, ocurrió un error',
+                error: error.message
+            });
+        }
+};
+//---------Actualizar datos de la tabla users----------
+export const updateUsers = async (req, res) => {
+    console.log(req.body); 
+    const { id, username, correo, institucion, fechanacimiento, celular, niveleducatito,sexo } = req.body;
 
+    try {
+        // Actualizamos usuario en la base de datos
+        const [result] = await pool.query(
+            `UPDATE users 
+            SET username =?, correo =?, institucion =?, fechanacimiento =?, celular =?, niveleducatito =?, sexo =? 
+            WHERE username =?`, 
+            [ username, correo, institucion, fechanacimiento, celular, niveleducatito,sexo,username]
+        );
+        console.log('Parámetros:', req.body);
 
+        //console.log(result);
+
+        res.json({
+            username,
+            correo,
+            sexo,
+            institucion,
+            fechanacimiento,
+            celular,
+            niveleducatito,
+            message: 'Usuario ' + username + ' Atualizado exitosamente!' ,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Upps, ocurrió un error',
+            error: error.message
+        });
+    }
+};
+//
 

@@ -95,11 +95,16 @@ INSERT INTO materia_nivel VALUES
 ------------ Maria -----------------
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipocuenta VARCHAR(255) NOT NULL UNIQUE,
+    tipocuenta VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     correo VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    institucion VARCHAR(255),
+    fechanacimiento VARCHAR(255),
+    celular VARCHAR(10),
+    niveleducatito VARCHAR(255)
 );
+
 
 -----------Ivette---------------
 CREATE TABLE coleccion (
@@ -114,7 +119,7 @@ CREATE TABLE  coleccion_recurso (
     colecciones_id INT NOT NULL,
     recurso_id INT NOT NULL,
     titulo VARCHAR (200),
-    descripcion VARCHAR (300),
+    descripcion VARCHAR (500),
     url VARCHAR(500),
     image_url VARCHAR(500),
     recurso_tipo ENUM('menu', 'video', 'actividad', 'libro') NOT NULL,
