@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-//import fileupload from 'express-fileupload';
+import fileupload from 'express-fileupload';
 import materiasRoutes from './routes/materias.routes.js';
 import videosRoutes from './routes/videos.routes.js';
 import actividadesRoutes from './routes/actividades.routes.js';
@@ -19,9 +19,9 @@ app.use(cors({
 
 app.use(express.json());
 
-// app.use(fileupload({
-//   createParentPath: true
-// }));
+app.use(fileupload({
+   createParentPath: true
+ }));
 
 app.use('/uploads', express.static(path.resolve('uploads')));
 //app.use('/uploads', express.static('uploads'));
